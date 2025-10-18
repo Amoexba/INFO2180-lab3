@@ -1,19 +1,18 @@
 document.addEventListener("DOMContentLoaded", function () {
+  console.log("tic-tac-toe.js loaded"); 
+
   const squares = document.querySelectorAll("#board div");
   const newGameButton = document.querySelector("#game .controls .btn");
   const status = document.getElementById("status");
   let currentPlayer = "X";
   const gameState = Array(9).fill(null);
 
+  console.log("New Game button found:", newGameButton); // Confirm button is selected
+
   const winningCombos = [
-    [0, 1, 2], 
-    [3, 4, 5],
-    [6, 7, 8],
-    [0, 3, 6], 
-    [1, 4, 7],
-    [2, 5, 8],
-    [0, 4, 8], 
-    [2, 4, 6]
+    [0, 1, 2], [3, 4, 5], [6, 7, 8],
+    [0, 3, 6], [1, 4, 7], [2, 5, 8],
+    [0, 4, 8], [2, 4, 6]
   ];
 
   function checkWinner() {
@@ -22,6 +21,7 @@ document.addEventListener("DOMContentLoaded", function () {
       if (gameState[a] && gameState[a] === gameState[b] && gameState[a] === gameState[c]) {
         status.textContent = `Congratulations! ${gameState[a]} is the Winner!`;
         status.classList.add("you-won");
+        console.log("Winner detected:", gameState[a]);
         return true;
       }
     }
@@ -37,11 +37,15 @@ document.addEventListener("DOMContentLoaded", function () {
         square.classList.add(currentPlayer);
         gameState[index] = currentPlayer;
 
-        if (checkWinner()) {
-          return; 
-        }
+        console.log(`Square ${index} clicked, set to ${currentPlayer}`);
+        console.log("Game state now:", gameState);
+
+        if (checkWinner()) return;
 
         currentPlayer = currentPlayer === "X" ? "O" : "X";
+        console.log("Next player is:", currentPlayer);
+      } else {
+        console.log(`Square ${index} already filled — move ignored`);
       }
     });
 
@@ -57,14 +61,19 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   newGameButton.addEventListener("click", function () {
+    console.log("New Game button clicked");
+
     squares.forEach(function (square, index) {
       square.textContent = "";
       square.classList.remove("X", "O", "hover");
       gameState[index] = null;
+      console.log(`Square ${index} reset`);
     });
 
     currentPlayer = "X";
     status.textContent = "Move your mouse over a square and click to play an X or an O.";
     status.classList.remove("you-won");
+
+    console.log("Game reset complete, state:", gameState);
   });
 });
